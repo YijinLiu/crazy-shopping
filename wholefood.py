@@ -19,6 +19,9 @@ def main():
     parser = args.create_parser()
     parser.add_argument("--email", type=str, help="Amazon account email")
     parser.add_argument("--password", type=str, help="Amazon account password")
+    parser.add_argument("--morning-only", dest='morning_only', action='store_true')
+    parser.add_argument("--no-morning-only", dest='morning_only', action='store_false')
+    parser.set_defaults(morning_only=True)
     a = parser.parse_args()
 
     logging.basicConfig(
@@ -80,7 +83,8 @@ def main():
                             price_str = slot_ctn.find_element_by_class_name(
                                 "ufss-slot-price-text").get_attribute("innerText")
                             logging.info("Found slot '%s', price is '%s'." % (time_str, price_str))
-                            if price_str == "FREE":
+                            if price_str == "FREE" and (not a.morning_only or
+                                                        time_str.endswith('AM')):
                                 logging.info("Will use %s." % time_str)
                                 btn = WebDriverWait(d, a.short_timeout_secs).until(
                                     EC.element_to_be_clickable(
