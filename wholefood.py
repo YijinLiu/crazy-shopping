@@ -108,7 +108,7 @@ def main():
         logging.warning("Timeout.")
     finally:
         pass
-        #d.quit()
+        d.quit()
 
 if __name__ == "__main__":
     main()
